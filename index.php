@@ -1,93 +1,111 @@
 <!DOCTYPE html>
 <?php
 /*
-* Copyright (C) 2017 AXEL LAGUNES
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    */
+ * Copyright (C) 2017 AXEL LAGUNES
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-    include './Plantillas/tools.php';
-    head("SICE-Inicio");
+include './Plantillas/tools.php';
+head("SICE-Inicio");
 ?>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+    <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">SICE</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>
-        <?php 
-        $output = array();
-        exec('ping localhost', $output);
-        print_r($output,true);
+        <?php        
+        echo '<div id="navbar" class="navbar-collapse collapse">';       
+        if (isset($_SESSION['user'])) {       
+            echo '<form class="navbar-form navbar-right" action="Plantillas/logout.php" method="POST">';
+            echo '<div class="form-group">';
+            echo '<input type="text" name="user" value="'.$_SESSION['user'].'" class="form-control" disabled>';
+            echo '</div>';
+            echo '<button type="submit" class="btn btn-success">Logout</button>';
+        }else{          
+            echo '<form class="navbar-form navbar-right" action="Plantillas/login.php" method="POST">';
+            echo '<div class="form-group">';
+            echo '<input type="text" name="user" placeholder="Correo" class="form-control">';
+            echo '</div>';
+            echo '<div class="form-group">';
+            echo '<input type="password" name="contra" placeholder="Contraseña" class="form-control">';
+            echo '</div>';
+            echo '<button type="submit" class="btn btn-success">Login</button>';           
+        }     
+        echo '</form>';
+        echo '</div><!--/.navbar-collapse -->';
         ?>
+  
+    </div>
+</nav>
+
+
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>
+            ¡Bienvenido a SICE!
         </h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
-      </div>
+        <div style="text-align: center">
+            <img src="imagenes/worldmap-dotted.png" alt="" width="60%" />
+        </div>
+        <br />
+        <p>Este sistema permite la creación y aplicación de encuestas, para comenzar registrate aquí:</p>
+        <p><a class="btn btn-primary btn-lg" href="registro.php" role="button">Registrarme</a></p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-12">
+            <h4>
+                Caracteristicas de SICE
+            </h4>
+            <hr>
+        </div>
+        <div class="col-md-4">
+            <img src="imagenes/encuestas.png" alt="" width="100%"/>
+            <h2>Participa en encuestas</h2>
+            <p>Participa en las encuestas que tu quieras, navega en tu cuenta para ver las encuestas que te interesen y contestalas para ayudar a la investigación del encuestador.</p>
+        </div>
+        <div class="col-md-4">
+            <img src="imagenes/crear.png" alt="" width="76%"/>
+            <h2>Crea encuestas</h2>
+            <p>Con una cuenta de administrador de encuestas podrás crear tus propias encuestas, no hay limite en la cantidad de preguntas y estas pueden ser de cualquier tipo(abiertas, opción múltiple, selección múltiple). </p>
+            <p><a class="btn btn-default" href="registro.php" role="button">Registrarse &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <img src="imagenes/grafica.png" alt="" width="100%"/>
+            <h2>Resultados estadísticos</h2>
+            <p>Ve los resultados de tus encuestas en forma de estadísticas con gráficas y datos útiles. </p>
+        </div>
     </div>
 
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
+    <hr>
 
-      <hr>
-
-      <footer>
-        <p>&copy; 2016 Company, Inc.</p>
-      </footer>
-    </div> <!-- /container -->
-
+    <footer>
+        <p>MechSolutions</p>
+    </footer>
+</div> 
 
 <?php
-    ender();
+ender();

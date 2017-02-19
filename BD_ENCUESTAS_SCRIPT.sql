@@ -1,6 +1,6 @@
 
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `Encuestas` DEFAULT CHARACTER SET utf8 ;
+
+CREATE DATABASE 'Encuestas' DEFAULT CHARACTER SET utf8 ;
 USE `Encuestas` ;
 
 -- -----------------------------------------------------
@@ -111,5 +111,6 @@ CREATE TABLE IF NOT EXISTS `Encuestas`.`resultadoOpcion` (
   CONSTRAINT fk_idUsuario2 FOREIGN KEY (fk_idUsuario) REFERENCES usuario (idUsuario));
 
 
-
+----mods
+ALTER TABLE `usuario` ADD `tipoUsuario` VARCHAR(3) NOT NULL DEFAULT 'usr' AFTER `contrasena`;
 
