@@ -1,6 +1,5 @@
 <?php
-
-/* 
+/*
  * Copyright (C) 2017 USUARIO
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,14 +19,51 @@
 include './Plantillas/EncuestaDao.php';
 head("SICE-VerEncuesta");
 
-
-popularTablasEncuestas();
-
 ?>
 
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">SICE</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right" action="Plantillas/logout.php" method="POST">
+                <div class="form-group">
+                    <?php echo '<input type="text" name="user" value="' . $_SESSION['user'] . '" class="form-control" disabled>';?>
+                </div>
+                <button type="submit" class="btn btn-success">Logout</button>
+            </form>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
 
+<div class="jumbotron">
+    
+</div>
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Encuestas disponibles:</h1>
+            <hr>
+        </div>
+        <div class="col-md-4" style="font-size: 30px">
+            <?php popularTablasEncuestas();?>
+        </div>
+    </div>
 
+    <hr>
 
+    <footer>
+        <p>MechSolutions</p>
+    </footer>
+</div> 
 
 
 <?php

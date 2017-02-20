@@ -94,27 +94,33 @@ function setOpcion($idPregunta, $descripcion) {
     }
 }
 
+/**
+ * Metodo que regrsa todas las encuestas para los usuarios
+ * @return string
+ */
 function popularTablasEncuestas() {
 
-    $tabla = "";
+    echo '<ul>';
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
     $sql = "SELECT * from encuesta;";
-        
     
     if ($result = mysqli_query($con, $sql)) {
         
         // Fetch one and one row
+        $array = array();
         while ($row = mysqli_fetch_row($result)) {
-            printf("%s %s %s\n", $row[0], $row[1], $row[2]);
+            echo '<li><a href="contestarEncuesta?nombre='. $row[1] .'&id='. $row[0] .'">'. $row[1] .'</a></li>';
+        } 
+        
+        foreach ($array as $x){
+            
         }
+        
         // Free result set
         mysqli_free_result($result);
-        
     }
-
     mysqli_close($con);
-
-
-    return $tabla;
+    
+    echo '</ul>';
 }
