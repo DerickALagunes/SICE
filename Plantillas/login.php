@@ -25,18 +25,7 @@ $pass = $_POST["contra"];
 $result = logIn($user, $pass);
 
 
-if ($result > 0) {
-    
-    echo 'Bienvenido'.$user;
-    sleep(7);
-    
-    $_SESSION['user']=$user;
-    
-    if ($result == 2) {
-        $_SESSION['tipo']="admin";
-    }  else {
-        $_SESSION['tipo']="user";
-    }
+if ($result > 0) {    
     
     header("Location: ../index.php");  
     

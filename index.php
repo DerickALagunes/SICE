@@ -32,15 +32,15 @@ head("SICE-Inicio");
             </button>
             <a class="navbar-brand" href="#">SICE</a>
         </div>
-        <?php        
-        echo '<div id="navbar" class="navbar-collapse collapse">';       
-        if (isset($_SESSION['user'])) {       
+        <?php
+        echo '<div id="navbar" class="navbar-collapse collapse">';
+        if (isset($_SESSION['user'])) {
             echo '<form class="navbar-form navbar-right" action="Plantillas/logout.php" method="POST">';
             echo '<div class="form-group">';
-            echo '<input type="text" name="user" value="'.$_SESSION['user'].'" class="form-control" disabled>';
+            echo '<input type="text" name="user" value="' . $_SESSION['user'] . '" class="form-control" disabled>';
             echo '</div>';
             echo '<button type="submit" class="btn btn-success">Logout</button>';
-        }else{          
+        } else {
             echo '<form class="navbar-form navbar-right" action="Plantillas/login.php" method="POST">';
             echo '<div class="form-group">';
             echo '<input type="text" name="user" placeholder="Correo" class="form-control">';
@@ -48,15 +48,14 @@ head("SICE-Inicio");
             echo '<div class="form-group">';
             echo '<input type="password" name="contra" placeholder="Contraseña" class="form-control">';
             echo '</div>';
-            echo '<button type="submit" class="btn btn-success">Login</button>';           
-        }     
+            echo '<button type="submit" class="btn btn-success">Login</button>';
+        }
         echo '</form>';
         echo '</div><!--/.navbar-collapse -->';
         ?>
-  
+
     </div>
 </nav>
-
 
 
 <div class="jumbotron">
@@ -68,8 +67,25 @@ head("SICE-Inicio");
             <img src="imagenes/worldmap-dotted.png" alt="" width="60%" />
         </div>
         <br />
-        <p>Este sistema permite la creación y aplicación de encuestas, para comenzar registrate aquí:</p>
-        <p><a class="btn btn-primary btn-lg" href="registro.php" role="button">Registrarme</a></p>
+        <?php
+        if (isset($_SESSION['user'])) {
+            echo '<div class="col-md-12" style="text-align: center">';
+            if ($_SESSION['tipo'] == 'admin') {
+                echo '<div class="col-md-6">';
+                echo '<p><a class="btn btn-primary btn-lg" href="crearEncuesta.php" role="button">Crear una encuesta</a></p>';
+                echo '</div>';
+                echo '<div class="col-md-6">';
+                echo '<p><a class="btn btn-primary btn-lg" href="verEncuestaAdm.php" role="button">Ver mis encuestas</a></p>';
+                echo '</div>';
+            } else {
+                echo '<p><a class="btn btn-primary btn-lg" href="verEncuesta.php" role="button">Ver encuestas</a></p>';
+            }
+        } else {
+            echo '<p>Este sistema permite la creación y aplicación de encuestas, para comenzar registrate aquí:</p>';
+            echo '<p><a class="btn btn-primary btn-lg" href="registro.php" role="button">Registrarme</a></p>';
+        }
+        echo '</div>';
+        ?>
     </div>
 </div>
 

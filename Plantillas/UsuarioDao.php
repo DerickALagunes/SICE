@@ -36,18 +36,22 @@ function logIn($userName, $pass) {
 
     $mysqli = new mysqli('localhost', 'php', 'php', 'encuestas');
 
-    $call = $mysqli->prepare('CALL verificarUsuario(?, ?, @existe, @tipo)');
+    $call = $mysqli->prepare('CALL verificarUsuario(?, ?, @existe, @tipo, @idUsuario)');
     $call->bind_param('ss', $userName, $pass);
     $call->execute();
 
-    $select = $mysqli->query('SELECT @existe, @tipo');
+    $select = $mysqli->query('SELECT @existe, @tipo, @idUsuario');
     $result = $select->fetch_assoc();
-    
     
     $tipo = $result['@tipo'];
         
     if ($result['@existe']){
-        return $tipo;
+        
+        $_SESSION['user']=$userName;
+        $_SESSION['userId']=$result['@idUsuario'];
+        $_SESSION['tipo']= $tipo==2?"admin":"user";
+        
+        return 1;
     }else {
         return 0;
     }
