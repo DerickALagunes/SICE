@@ -154,7 +154,7 @@ function popularPreguntas($idEncuesta) {
 							        		
 							echo '<div class="radio" name="respuesta'.$count.'">';
                   	echo '<label for="radios-'.$optionCount.'">';
-                  	echo '<input name="respuesta'.$count.'" id="radios-'.$optionCount.'" type="radio">';
+                  	echo '<input type="radio" name="respuesta'.$count.'" value="'.$row2[0].'">';
                   	echo $row2[2];
                   	echo '</label>';
 	               	echo '</div>';					        		
@@ -184,5 +184,34 @@ function popularPreguntas($idEncuesta) {
     mysqli_close($con);
 	 mysqli_close($con2);
     
+}
+
+
+
+/**
+ * Método que regresa todas las encuestas para el usuario
+ * solo cambia la condición de la consulta :v
+ * @return string
+ */
+function popularEncuestasDeUser($idUser) {
+
+    echo '<ul>';
+
+    $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+    $sql = "SELECT * FROM encuesta WHERE fk_idUsuario='$idUser';";
+    
+    if ($result = mysqli_query($con, $sql)) {
+        
+        // Fetch one and one row
+        while ($row = mysqli_fetch_row($result)) {
+            echo '<li><a href="resultadoEncuesta.php?nombre='. $row[1] .'&id='. $row[0] .'">'. $row[1] .'</a></li>';
+        } 
+        
+        // Free result set
+        mysqli_free_result($result);
+    }
+    mysqli_close($con);
+    
+    echo '</ul>';
 }
 

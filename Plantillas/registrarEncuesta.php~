@@ -32,7 +32,6 @@ $idEncuesta=0;
 $idPregunta=0;
 
 
-echo var_dump($todo);
 echo '<br/>';
 //primera iteracion: nombre encuesta
 //segunda:           nombre pregunta
@@ -70,3 +69,8 @@ foreach ($todo as $name => $val) {
 
     $count++;
 }
+
+
+echo '<h1>Encuesta creada</h1>';
+sleep(3);
+header("Location ../index.php");

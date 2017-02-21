@@ -19,8 +19,8 @@
 
 session_start();
 
-function head($titulo){
-echo <<< YOP
+function head($titulo) {
+    echo <<< YOP
     <!DOCTYPE html>
     <html>
         <head>
@@ -28,12 +28,9 @@ echo <<< YOP
             
             <!-- Bootstrap core CSS -->
             <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-            <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-            <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-            <!-- Custom styles for this template -->
-            <link href="jumbotron-narrow.css" rel="stylesheet">
+    
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
 
             <title>
                 $titulo
@@ -43,32 +40,14 @@ echo <<< YOP
 YOP;
 }
 
-function ender(){
-echo <<< YOP
+function ender() {
+    echo <<< YOP
 
 	 <!-- Bootstrap core JavaScript ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>
 
 YOP;
 }
-
-/*
- * Función de conexion a un servidor MySQL 
- * Requires $host, $dbNAme, $user and $pass params
- * 
- * For now, not handling errors
- */
-function conexion($host, $dbName,$user, $pass){
-    if($pdo = new PDO('mysql:host='+$host+';dbname='+$dbName, $user, $pass)){
-        return $pdo;
-    }  else {
-        //handle error
-    }
-}
-        
-        

@@ -54,7 +54,7 @@ head("SICE-VerEncuesta");
             <hr>
         </div>
         <div class="col-md-4" style="font-size: 30px">
-            <?php popularEncuestasDeUser($_SESSION['userId']);?>
+            <?php popularEncuestasDeUser($_SESSION['id']);?>
         </div>
     </div>
 

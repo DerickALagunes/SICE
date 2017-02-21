@@ -73,4 +73,4 @@ foreach ($todo as $name => $val) {
 
 echo '<h1>Encuesta creada</h1>';
 sleep(3);
-header("Location ../index.php");
+header("Location: ../index.php");

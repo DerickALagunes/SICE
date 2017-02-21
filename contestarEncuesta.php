@@ -58,7 +58,7 @@ if(!isset($_GET['id'])) {
             <hr>
         </div>
         <div class="col-md-12">
-        		<form class="form-horizontal"><!-- manejar meter resultados a bd -->
+        		<form class="form-horizontal" method="GET" action="Plantillas/registrarRespuestas.php"><!-- manejar meter resultados a bd -->
 					<fieldset>
 					<!-- Form Name -->
 						<legend>Contesta:</legend>
