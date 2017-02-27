@@ -138,7 +138,7 @@ function popularPreguntas($idEncuesta) {
         	
         	   echo '<div class="form-group">';	
         	   echo '<h4>Pregunta'.$count.'</h4>';
-        	   echo '<label class="col-md-4 control-label" for="respuesta'.$count.'">'.$row[4].'</label>';
+        	   echo '<label class="col-md-4 control-label" for="'.$row[0].'">'.$row[4].'</label>';
         	   echo '<div class="col-md-4">';      	   
 
 				//si es de tipo opción o selección				
@@ -150,14 +150,22 @@ function popularPreguntas($idEncuesta) {
     				if($result2 = mysqli_query($con2, $sql2)) {
     					$optionCount = 0;
         				while ($row2 = mysqli_fetch_row($result2)) {
-							//manejar opciones de la pregunta
-							        		
-							echo '<div class="radio" name="respuesta'.$count.'">';
-                  	echo '<label for="radios-'.$optionCount.'">';
-                  	echo '<input type="radio" name="respuesta'.$count.'" value="'.$row2[0].'">';
+							//manejar opciones de la pregunta opción o selección
+							        		     		
+							//opción
+							if($row[2] == 2) {
+							echo '<div class="radio" name="'.$row[0].'">';
+                  	echo '<input type="radio" name="'.$row[0].'" value="'.$row2[0].'">';
                   	echo $row2[2];
-                  	echo '</label>';
-	               	echo '</div>';					        		
+	               	echo '</div>';		
+	               	} 
+	               	//selección
+	               	if($row[2] == 3) {
+							echo '<div class="checkbox" name="'.$row[0].'">';
+          				echo '<input type="checkbox" name="'.$row[0].'[]" value="'.$row2[0].'">';
+      					echo $row2[2];
+    						echo '</div>';
+	               	} 			        		
 							        								        				
         				}
     				
@@ -166,7 +174,7 @@ function popularPreguntas($idEncuesta) {
     				
 				} else { //es abierta: nombre= respuestax
 				
-					echo '<input id="respuesta'.$count.'" name="respuesta'.$count.'" class="form-control input-md" type="text">';
+					echo '<input id="respuesta'.$count.'" name="'.$row[0].'" class="form-control input-md" type="text">';
 				
 				}       
 								
@@ -215,3 +223,90 @@ function popularEncuestasDeUser($idUser) {
     echo '</ul>';
 }
 
+/**
+*Método para registrar las respuestas del usuario en la base de datos
+*la variable respuesta puede ser una id de opción o una string si es
+* abierta
+* @return true or false
+*/
+function registrarRespuesta($idUsuario, $idPregunta, $respuesta){
+	
+    $estado = false;
+	
+	 $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+	 
+	 if(is_numeric($respuesta)) {	 
+	 	$query = "CALL registrarRespuestaOpcion($idUsuario,$idPregunta,$respuesta);";	 
+	 }else{
+		$query = "CALL registrarRespuestaAbierta($idUsuario,$idPregunta,'$respuesta');";	 
+	 }
+
+    if (mysqli_query($con, $query)) {
+        $estado = true;
+    } else {
+    	printf("error: %s\n", mysqli_error($con));
+    	echo '<br />';
+    }
+
+
+	$con->close();
+	return $estado;
+	
+}
+	
+/**
+* Método para devolver un arreglo asociativo con las respuestas de la encuesta
+* para poder mandarlo a la función que gráfica
+*/
+function getResultados($idEncuesta, $idPregunta) {
+
+	 $arreglo = array();
+
+    $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+    $sql = "select pregunta.descripcion,opciones.descripcion,COUNT(resultadoopcion.fk_idUsuario) from opciones join resultadoopcion on resultadoopcion.respuesta=opciones.idOpciones join pregunta on pregunta.idPregunta=opciones.fk_idPregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta WHERE encuesta.idEncuesta=$idEncuesta AND pregunta.idPregunta=$idPregunta GROUP BY opciones.descripcion ORDER BY pregunta.descripcion;";
+      
+    
+    if ($result = mysqli_query($con, $sql)) {
+        
+        while ($row = mysqli_fetch_row($result)) {
+            
+				$arreglo[$row[1]] = $row[2];
+
+        } 
+
+        mysqli_free_result($result);
+    }
+    mysqli_close($con);
+	 
+	return $arreglo; 
+}
+	
+	
+
+/**
+* Método para devolver un arreglo asociativo con las respuestas de la encuesta
+* para poder mandarlo a la función que gráfica
+*/
+function getPreguntas($idEncuesta) {
+
+	 $arreglo = array();
+
+    $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+    $sql = "select pregunta.idPregunta from pregunta WHERE fk_idEncuesta=$idEncuesta ;";
+      
+    
+    if ($result = mysqli_query($con, $sql)) {
+        
+        while ($row = mysqli_fetch_row($result)) {
+            
+            array_push($arreglo,$row[0]);
+
+        } 
+
+        mysqli_free_result($result);
+    }
+    mysqli_close($con);
+	 
+	return $arreglo; 
+}
+	

@@ -71,11 +71,27 @@ head("SICE-Resultados");
 
 <?php
 
-echo var_dump($_GET);
+//get arreglo de id's de preguntas:
+$idPreguntas = getPreguntas($_GET['id']);
+//get arreglo de nombres de las preguntas:
+$nombrePregunta = getNombres($_GET['id']);
 
-echo '<script type="text/javascript">';
-grafica("", "BarChart", "pizza", "rebanadas", "pizzataimu",300,400,"grafica");
-echo '</script>';
+foreach($idPreguntas as $id){
+	
+	$arreglo = getResultados($_GET['id'], $id);	
+	
+	echo '<h1>'.array_shift($nombrePregunta).'</h1>';
+	
+	echo '<script type="text/javascript">';
+	grafica($arreglo, "BarChart", "pizza", "rebanadas", "pizzataimu",300,400,"grafica");
+	echo '</script>';
+	
+	
+}
+
+
+
+
 
 ender();
 

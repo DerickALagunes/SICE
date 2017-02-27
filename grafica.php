@@ -8,7 +8,7 @@
 * columna1 de tipo string
 * columna2 de tipo number
 */
-function grafica($arregloRelacional, $tipo, $columna1, $columna2, $titulo, $altura, $ancho, $idDeDiv){
+function grafica($arreglo, $tipo, $columna1, $columna2, $titulo, $altura, $ancho, $idDeDiv){
 	echo <<< YOP
 	
 	// Load the Visualization API and the corechart package.
@@ -27,11 +27,10 @@ function grafica($arregloRelacional, $tipo, $columna1, $columna2, $titulo, $altu
         data.addColumn('string', '$columna1');
         data.addColumn('number', '$columna2');
         data.addRows([
-          ['Mushrooms', 3],
-          ['Onions', 1],
-          ['Olives', 1],
-          ['Zucchini', 1],
-          ['Pepperoni', 2]
+        <?php
+        foreach($arreglo as $pregunta => $resultados){
+          echo "['$pregunta',$resultados],";          
+        ?>
         ]);
         // Set chart options
         var options = {'title':'$titulo',

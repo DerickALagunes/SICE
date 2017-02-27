@@ -58,7 +58,7 @@ if(!isset($_GET['id'])) {
             <hr>
         </div>
         <div class="col-md-12">
-        		<form class="form-horizontal" method="GET" action="Plantillas/registrarRespuestas.php"><!-- manejar meter resultados a bd -->
+        		<form class="form-horizontal" method="POST" action="Plantillas/registrarRespuestas.php"><!-- manejar meter resultados a bd -->
 					<fieldset>
 					<!-- Form Name -->
 						<legend>Contesta:</legend>
@@ -69,7 +69,7 @@ if(!isset($_GET['id'])) {
         		        	<!--boton-->
         		        	<br/>
 		            <div style="text-align: center">
-                		<button id="reg" name="reg" class="btn btn-success">Registrar pregunta</button>
+                		<button id="reg" name="reg" class="btn btn-success">Registrar Respuestas</button>
                 		<br/>
                		<br/>
                 		<br/>
