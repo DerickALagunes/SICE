@@ -68,9 +68,9 @@ function getQuestionId($idEncuesta, $descripcion) {
     return $preguntaId;
 }
 
-function setPregunta($idEncuesta, $tipoPregunta, $numero, $descripcion) {
+function setPregunta($idEncuesta, $tipoPregunta, $descripcion) {
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    $query = "CALL nuevaPregunta('$idEncuesta','$tipoPregunta','$numero','$descripcion');";
+    $query = "CALL nuevaPregunta('$idEncuesta','$tipoPregunta','$descripcion');";
 
     if (mysqli_query($con, $query)) {
         $con->close();
@@ -104,19 +104,19 @@ function popularEncuestas() {
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
     $sql = "SELECT * from encuesta;";
-    
+
     if ($result = mysqli_query($con, $sql)) {
-        
+
         // Fetch one and one row
         while ($row = mysqli_fetch_row($result)) {
-            echo '<li><a href="contestarEncuesta.php?nombre='. $row[1] .'&id='. $row[0] .'">'. $row[1] .'</a></li>';
-        } 
-        
+            echo '<li><a href="contestarEncuesta.php?nombre=' . $row[1] . '&id=' . $row[0] . '">' . $row[1] . '</a></li>';
+        }
+
         // Free result set
         mysqli_free_result($result);
     }
     mysqli_close($con);
-    
+
     echo '</ul>';
 }
 
@@ -125,76 +125,68 @@ function popularEncuestas() {
  * @return string
  */
 function popularPreguntas($idEncuesta) {
-	
-	 $count = 1;
 
-	 //primera consulta, get pregunta
+    $count = 1;
+
+    //primera consulta, get pregunta
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
     $sql = "SELECT * from pregunta where fk_idEncuesta='$idEncuesta';";
-    
-    if ($result = mysqli_query($con, $sql)) {  
-		     
+
+    if ($result = mysqli_query($con, $sql)) {
+
         while ($row = mysqli_fetch_row($result)) {
-        	
-        	   echo '<div class="form-group">';	
-        	   echo '<h4>Pregunta'.$count.'</h4>';
-        	   echo '<label class="col-md-4 control-label" for="'.$row[0].'">'.$row[4].'</label>';
-        	   echo '<div class="col-md-4">';      	   
 
-				//si es de tipo opción o selección				
-				if($row[2] == 2 || $row[2] == 3) {
-					//segunda consulta, get opciones
-					$con2 = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    				$sql2 = "SELECT * from opciones where fk_idPregunta='$row[0]';";
-    				
-    				if($result2 = mysqli_query($con2, $sql2)) {
-    					$optionCount = 0;
-        				while ($row2 = mysqli_fetch_row($result2)) {
-							//manejar opciones de la pregunta opción o selección
-							        		     		
-							//opción
-							if($row[2] == 2) {
-							echo '<div class="radio" name="'.$row[0].'">';
-                  	echo '<input type="radio" name="'.$row[0].'" value="'.$row2[0].'">';
-                  	echo $row2[2];
-	               	echo '</div>';		
-	               	} 
-	               	//selección
-	               	if($row[2] == 3) {
-							echo '<div class="checkbox" name="'.$row[0].'">';
-          				echo '<input type="checkbox" name="'.$row[0].'[]" value="'.$row2[0].'">';
-      					echo $row2[2];
-    						echo '</div>';
-	               	} 			        		
-							        								        				
-        				}
-    				
-    				mysqli_free_result($result2);
-    				}
-    				
-				} else { //es abierta: nombre= respuestax
-				
-					echo '<input id="respuesta'.$count.'" name="'.$row[0].'" class="form-control input-md" type="text">';
-				
-				}       
-								
-				echo '</div>';
-		      echo '</div>';
-		      echo '<hr>';
-        	
+            echo '<div class="form-group">';
+            echo '<h4>Pregunta' . $count . '</h4>';
+            echo '<label class="col-md-4 control-label" for="' . $row[0] . '">' . $row[3] . '</label>';
+            echo '<div class="col-md-4">';
 
-			$count++;
-        }         	         
-               
+            //si es de tipo opción o selección				
+            if ($row[2] == 2 || $row[2] == 3) {
+                //segunda consulta, get opciones
+                $con2 = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+                $sql2 = "SELECT * from opciones where fk_idPregunta='$row[0]';";
+
+                if ($result2 = mysqli_query($con2, $sql2)) {
+                    $optionCount = 0;
+                    while ($row2 = mysqli_fetch_row($result2)) {
+                        //manejar opciones de la pregunta opción o selección
+                        //opción
+                        if ($row[2] == 2) {
+                            echo '<div class="radio" name="' . $row[0] . '">';
+                            echo '<input type="radio" name="' . $row[0] . '" value="' . $row2[0] . '">';
+                            echo $row2[2];
+                            echo '</div>';
+                        }
+                        //selección
+                        if ($row[2] == 3) {
+                            echo '<div class="checkbox" name="' . $row[0] . '">';
+                            echo '<input type="checkbox" name="' . $row[0] . '[]" value="' . $row2[0] . '">';
+                            echo $row2[2];
+                            echo '</div>';
+                        }
+                    }
+
+                    mysqli_free_result($result2);
+                }
+                    mysqli_close($con2);
+            } else { //es abierta: nombre= respuestax
+                echo '<input id="respuesta' . $count . '" name="' . $row[0] . '" class="form-control input-md" type="text">';
+            }
+
+            echo '</div>';
+            echo '</div>';
+            echo '<hr>';
+
+
+            $count++;
+        }
+
         // Free result set
         mysqli_free_result($result);
     }
     mysqli_close($con);
-	 mysqli_close($con2);
-    
 }
-
-
 
 /**
  * Método que regresa todas las encuestas para el usuario
@@ -207,133 +199,177 @@ function popularEncuestasDeUser($idUser) {
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
     $sql = "SELECT * FROM encuesta WHERE fk_idUsuario='$idUser';";
-    
+
     if ($result = mysqli_query($con, $sql)) {
-        
+
         // Fetch one and one row
         while ($row = mysqli_fetch_row($result)) {
-            echo '<li><a href="resultadoEncuesta.php?nombre='. $row[1] .'&id='. $row[0] .'">'. $row[1] .'</a></li>';
-        } 
-        
+            echo '<li><a href="resultadoEncuesta.php?nombre=' . $row[1] . '&id=' . $row[0] . '">' . $row[1] . '</a></li>';
+        }
+
         // Free result set
         mysqli_free_result($result);
     }
     mysqli_close($con);
-    
+
     echo '</ul>';
 }
 
 /**
-*Método para registrar las respuestas del usuario en la base de datos
-*la variable respuesta puede ser una id de opción o una string si es
-* abierta
-* @return true or false
-*/
-function registrarRespuesta($idUsuario, $idPregunta, $respuesta){
-	
+ * Método para registrar las respuestas del usuario en la base de datos
+ * la variable respuesta puede ser una id de opción o una string si es
+ * abierta
+ * @return true or false
+ */
+function registrarRespuesta($idUsuario, $idPregunta, $respuesta) {
+
     $estado = false;
-	
-	 $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-	 
-	 if(is_numeric($respuesta)) {	 
-	 	$query = "CALL registrarRespuestaOpcion($idUsuario,$idPregunta,$respuesta);";	 
-	 }else{
-		$query = "CALL registrarRespuestaAbierta($idUsuario,$idPregunta,'$respuesta');";	 
-	 }
+
+    $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+
+    if (is_numeric($respuesta)) {
+        $query = "CALL registrarRespuestaOpcion($idUsuario,$idPregunta,$respuesta);";
+    } else {
+        $query = "CALL registrarRespuestaAbierta($idUsuario,$idPregunta,'$respuesta');";
+    }
 
     if (mysqli_query($con, $query)) {
         $estado = true;
     } else {
-    	printf("error: %s\n", mysqli_error($con));
-    	echo '<br />';
+        printf("error: %s\n", mysqli_error($con));
+        echo '<br />';
     }
 
 
-	$con->close();
-	return $estado;
-	
+    $con->close();
+    return $estado;
 }
-	
+
 /**
-* Método para devolver un arreglo asociativo con las respuestas de la encuesta
-* para poder mandarlo a la función que gráfica
-*/
+ * Método para devolver un arreglo asociativo con las respuestas de la encuesta
+ * para poder mandarlo a la función que gráfica
+ */
 function getResultados($idEncuesta, $idPregunta) {
 
-	 $arreglo = array();
+    $arreglo = array();
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    $sql = "select pregunta.descripcion,opciones.descripcion,COUNT(resultadoopcion.fk_idUsuario) from opciones join resultadoopcion on resultadoopcion.respuesta=opciones.idOpciones join pregunta on pregunta.idPregunta=opciones.fk_idPregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta WHERE encuesta.idEncuesta=$idEncuesta AND pregunta.idPregunta=$idPregunta GROUP BY opciones.descripcion ORDER BY pregunta.descripcion;";
-      
-    
-    if ($result = mysqli_query($con, $sql)) {
-        
-        while ($row = mysqli_fetch_row($result)) {
-            
-				$arreglo[$row[1]] = $row[2];
+    $sql = "select pregunta.descripcion,opciones.descripcion,COUNT(resultadoopcion.fk_idUsuario) from opciones join resultadoopcion on resultadoopcion.respuesta=opciones.idOpciones join pregunta on pregunta.idPregunta=opciones.fk_idPregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta WHERE encuesta.idEncuesta=$idEncuesta AND pregunta.idPregunta=$idPregunta AND pregunta.fk_tipoPregunta != 1 GROUP BY opciones.descripcion ORDER BY pregunta.descripcion;";
 
-        } 
+
+    if ($result = mysqli_query($con, $sql)) {
+
+        while ($row = mysqli_fetch_row($result)) {
+
+            $arreglo[$row[1]] = $row[2];
+        }
 
         mysqli_free_result($result);
     }
     mysqli_close($con);
-	 
-	return $arreglo; 
+
+    return $arreglo;
 }
-	
-	
 
 /**
-* 
-*/
+ * 
+ */
 function getPreguntas($idEncuesta) {
 
-	 $arreglo = array();
+    $arreglo = array();
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    $sql = "select pregunta.idPregunta from pregunta WHERE fk_idEncuesta=$idEncuesta ;";
-      
-    
-    if ($result = mysqli_query($con, $sql)) {
-        
-        while ($row = mysqli_fetch_row($result)) {
-            
-            array_push($arreglo,$row[0]);
+    $sql = "select pregunta.idPregunta from pregunta WHERE fk_idEncuesta=$idEncuesta AND pregunta.fk_tipoPregunta != 1;";
 
-        } 
+
+    if ($result = mysqli_query($con, $sql)) {
+
+        while ($row = mysqli_fetch_row($result)) {
+
+            array_push($arreglo, $row[0]);
+        }
 
         mysqli_free_result($result);
     }
     mysqli_close($con);
-	 
-	return $arreglo; 
+
+    return $arreglo;
+}
+
+/**
+ * 
+ */
+function getNombres($idEncuesta) {
+
+    $arreglo = array();
+
+    $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+    $sql = "select pregunta.descripcion from pregunta WHERE fk_idEncuesta=$idEncuesta AND pregunta.fk_tipoPregunta != 1;";
+
+
+    if ($result = mysqli_query($con, $sql)) {
+
+        while ($row = mysqli_fetch_row($result)) {
+
+            array_push($arreglo, $row[0]);
+        }
+
+        mysqli_free_result($result);
+    }
+    mysqli_close($con);
+
+    return $arreglo;
+}
+
+/**
+ * Método para imprimir una lista de respuestas de las preguntas abiertas
+ */
+function getResultadosAbiertos($idEncuesta) {
+
+    $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
+    $sql = "select pregunta.descripcion, resultadoabierta.respuesta from pregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta JOIN resultadoabierta on resultadoabierta.fk_idPregunta=pregunta.idPregunta where encuesta.idEncuesta=$idEncuesta ORDER BY pregunta.descripcion LIMIT 9";
+
+    echo '<div class="col-md-12">';
+    echo '<ul>';
+    
+    if ($result = mysqli_query($con, $sql)) {
+
+
+        while ($row = mysqli_fetch_row($result)) {
+            echo '<li style="font-size: larger">' . $row[1] . '</li>';
+        }
+
+        mysqli_free_result($result);
+    }
+    mysqli_close($con);
+
+    echo '</ul>';
+    echo '<br />';
+    echo '</div>';
 }
 
 
 /**
-* 
-*/
-function getNombres($idEncuesta) {
+ * 
+ */
+function getNombresAbiertas($idEncuesta) {
 
-	 $arreglo = array();
+    $arreglo = array();
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    $sql = "select pregunta.descripcion from pregunta WHERE fk_idEncuesta=$idEncuesta ;";
-      
-    
-    if ($result = mysqli_query($con, $sql)) {
-        
-        while ($row = mysqli_fetch_row($result)) {
-            
-            array_push($arreglo,$row[0]);
+    $sql = "select pregunta.descripcion from pregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta where encuesta.idEncuesta=$idEncuesta AND pregunta.fk_tipoPregunta = 1 ORDER BY pregunta.descripcion LIMIT 9";
 
-        } 
+
+    if ($result = mysqli_query($con, $sql)) {
+
+        while ($row = mysqli_fetch_row($result)) {
+
+            array_push($arreglo, $row[0]);
+        }
 
         mysqli_free_result($result);
     }
     mysqli_close($con);
-	 
-	return $arreglo; 
+
+    return $arreglo;
 }
-	
-	

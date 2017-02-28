@@ -69,7 +69,7 @@ if(!isset($_GET['id'])) {
         		        	<!--boton-->
         		        	<br/>
 		            <div style="text-align: center">
-                		<button id="reg" name="reg" class="btn btn-success">Registrar Respuestas</button>
+                		<button class="btn btn-success">Registrar Respuestas</button>
                 		<br/>
                		<br/>
                 		<br/>

@@ -81,6 +81,7 @@ head("SICE-Inicio");
                 echo '<p><a class="btn btn-primary btn-lg" href="verEncuesta.php" role="button">Ver encuestas</a></p>';
             }
         } else {
+            echo '<div class="col-md-12" style="text-align: center">';
             echo '<p>Este sistema permite la creación y aplicación de encuestas, para comenzar registrate aquí:</p>';
             echo '<p><a class="btn btn-primary btn-lg" href="registro.php" role="button">Registrarme</a></p>';
         }
@@ -107,7 +108,6 @@ head("SICE-Inicio");
             <img src="imagenes/crear.png" alt="" width="76%"/>
             <h2>Crea encuestas</h2>
             <p>Con una cuenta de administrador de encuestas podrás crear tus propias encuestas, no hay limite en la cantidad de preguntas y estas pueden ser de cualquier tipo(abiertas, opción múltiple, selección múltiple). </p>
-            <p><a class="btn btn-default" href="registro.php" role="button">Registrarse &raquo;</a></p>
         </div>
         <div class="col-md-4">
             <img src="imagenes/grafica.png" alt="" width="100%"/>

@@ -27,10 +27,14 @@ function grafica($arreglo, $tipo, $columna1, $columna2, $titulo, $altura, $ancho
         data.addColumn('string', '$columna1');
         data.addColumn('number', '$columna2');
         data.addRows([
-        <?php
+YOP;
+                
+
         foreach($arreglo as $pregunta => $resultados){
           echo "['$pregunta',$resultados],";          
-        ?>
+        }
+
+        echo <<< YUI
         ]);
         // Set chart options
         var options = {'title':'$titulo',
@@ -42,9 +46,6 @@ function grafica($arreglo, $tipo, $columna1, $columna2, $titulo, $altura, $ancho
         chart.draw(data, options);
       }	
 	
-YOP;
+YUI;
 }
 
-
-
-?>

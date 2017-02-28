@@ -73,7 +73,7 @@ head("SICE-Crear");
 
             <!--boton-->
             <div style="text-align: center">
-                <button id="reg" name="reg" class="btn btn-success">Registrar encuesta</button>
+                <button class="btn btn-success">Registrar encuesta</button>
                 <br/>
                 <br/>
                 <br/>

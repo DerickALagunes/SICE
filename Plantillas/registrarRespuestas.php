@@ -5,7 +5,7 @@ include './EncuestaDao.php';
 head("SICE-RegRes");
 
 echo '<h1>estamos registrando tus resultados</h1>';
-echo '<img alt="" src="../imagenes/goodman.jpg"/>' ;
+echo '<img alt="" src="../imagenes/goodman.jpg" width="30%" />' ;
 
 
 foreach($_POST as $idPregunta => $idOpcion){
@@ -23,6 +23,4 @@ foreach($_POST as $idPregunta => $idOpcion){
     	    
 }
 
-header("Location: ../index.php");
-
-
+header( "refresh:3; url=../index.php" );
