@@ -70,15 +70,12 @@ function getQuestionId($idEncuesta, $descripcion) {
 
 function setPregunta($idEncuesta, $tipoPregunta, $descripcion) {
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    $query = "CALL nuevaPregunta('$idEncuesta','$tipoPregunta','$descripcion');";
+    $query = "CALL nuevaPregunta($idEncuesta,$tipoPregunta,'$descripcion');";
 
-    if (mysqli_query($con, $query)) {
-        $con->close();
-        return "done";
-    } else {
-        $con->close();
-        return "error";
+    if (!mysqli_query($con, $query)) { 
+        printf("error: %s\n", mysqli_error($con));
     }
+    $con->close();
 }
 
 function setOpcion($idPregunta, $descripcion) {
@@ -324,10 +321,10 @@ function getNombres($idEncuesta) {
 /**
  * Método para imprimir una lista de respuestas de las preguntas abiertas
  */
-function getResultadosAbiertos($idEncuesta) {
+function getResultadosAbiertos($idEncuesta,$nombre) {
 
     $con = mysqli_connect('localhost', 'php', 'php', 'encuestas') or die('Connection failed' . mysqli_error());
-    $sql = "select pregunta.descripcion, resultadoabierta.respuesta from pregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta JOIN resultadoabierta on resultadoabierta.fk_idPregunta=pregunta.idPregunta where encuesta.idEncuesta=$idEncuesta ORDER BY pregunta.descripcion LIMIT 9";
+    $sql = "select pregunta.descripcion, resultadoabierta.respuesta from pregunta JOIN encuesta on encuesta.idEncuesta=pregunta.fk_idEncuesta JOIN resultadoabierta on resultadoabierta.fk_idPregunta=pregunta.idPregunta where encuesta.idEncuesta=$idEncuesta AND pregunta.descripcion='$nombre' ORDER BY pregunta.descripcion LIMIT 9";
 
     echo '<div class="col-md-12">';
     echo '<ul>';

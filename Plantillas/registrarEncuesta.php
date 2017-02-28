@@ -46,17 +46,17 @@ foreach ($todo as $name => $val) {
         //iterando preguntas
         if (preg_match("/abierta.*/", $name)) {
             
-            setPregunta($idEncuesta, 1, $val);
+            echo setPregunta($idEncuesta, 1, $val);
             $idPregunta = getQuestionId($idEncuesta, $val);
             
         } elseif (preg_match("/opcion.*/", $name)) {
             
-            setPregunta($idEncuesta, 2, $val);
+            echo setPregunta($idEncuesta, 2, $val);
             $idPregunta = getQuestionId($idEncuesta, $val);
             
         } elseif (preg_match("/seleccion.*/", $name)) {
             
-            setPregunta($idEncuesta, 3, $val);
+            echo setPregunta($idEncuesta, 3, $val);
             $idPregunta = getQuestionId($idEncuesta, $val);
             
         }  else {
@@ -72,5 +72,7 @@ foreach ($todo as $name => $val) {
 
 echo '<h1>Encuesta creada</h1>';
 echo '<img alt="" src="../imagenes/oke.gif" width="20%" />' ;
+echo var_dump($todo);
 
-header( "refresh:1; url=../index.php" );
+
+//header( "refresh:1; url=../index.php" );

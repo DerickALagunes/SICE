@@ -62,7 +62,7 @@ $nombrePreguntaAbierta = getNombresAbiertas($_GET['id']);
 foreach ($nombrePreguntaAbierta as $pregunta){
     
     echo '<h1>' . $pregunta . '</h1>';
-    getResultadosAbiertos($_GET['id']);
+    getResultadosAbiertos($_GET['id'],$pregunta);
 }
 
 
