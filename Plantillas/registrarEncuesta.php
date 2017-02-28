@@ -72,7 +72,6 @@ foreach ($todo as $name => $val) {
 
 echo '<h1>Encuesta creada</h1>';
 echo '<img alt="" src="../imagenes/oke.gif" width="20%" />' ;
-echo var_dump($todo);
 
 
-//header( "refresh:1; url=../index.php" );
+header( "refresh:1; url=../index.php" );

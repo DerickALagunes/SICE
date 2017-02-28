@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.5.3.1deb1
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 20-02-2017 a las 07:42:22
--- Versión del servidor: 10.1.16-MariaDB
--- Versión de PHP: 5.6.24
+-- Servidor: localhost
+-- Tiempo de generación: 28-02-2017 a las 13:51:44
+-- Versión del servidor: 5.6.27-2
+-- Versión de PHP: 5.6.16-2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -40,12 +40,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `nuevaEncuesta` (IN `idUsuario` INT,
 INSERT INTO encuesta (nombreEncuesta,fk_idUsuario) VALUES(nombre,idUsuario);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `nuevaPregunta` (IN `idEncuesta` INT, IN `tipoPregunta` INT, IN `numero` INT, IN `descripcion` VARCHAR(250))  BEGIN
-INSERT INTO pregunta(fk_idEncuesta,fk_tipoPregunta,numero,descripcion) VALUES(idEncuesta,tipoPregunta,numero,descripcion);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `nuevaPregunta` (IN `idEncuesta` INT, IN `tipoPregunta` INT, IN `descrip` VARCHAR(250))  BEGIN
+ INSERT into pregunta (pregunta.fk_idEncuesta,pregunta.fk_tipoPregunta, pregunta.descripcion)
+ VALUES (idEncuesta,tipopregunta,descrip);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `nuevasOpciones` (IN `idPregunta` INT, IN `descripcion` VARCHAR(45))  BEGIN
 INSERT INTO opciones (fk_idPregunta,descripcion) VALUES(idPregunta,descripcion);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registrarRespuestaAbierta` (IN `idUsuario` INT, IN `idPregunta` INT, IN `respuesta` TEXT)  BEGIN
+INSERT INTO resultadoabierta (respuesta, fk_idUsuario, fk_idPregunta) VALUES(respuesta, idUsuario, idPregunta);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registrarRespuestaOpcion` (IN `idUsuario` INT, IN `idPregunta` INT, IN `respuesta` INT)  BEGIN
+INSERT INTO resultadoopcion (respuesta, fk_idUsuario, fk_idPregunta) VALUES(respuesta, idUsuario, idPregunta);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `verificarUsuario` (IN `usuario` VARCHAR(50), IN `contrasena` VARCHAR(45), OUT `existe` BOOLEAN, OUT `tipo` INT, OUT `idUser` INT)  BEGIN
@@ -81,7 +90,9 @@ CREATE TABLE `encuesta` (
 --
 
 INSERT INTO `encuesta` (`idEncuesta`, `nombreEncuesta`, `fk_idUsuario`) VALUES
-(30, 'nueva', 4);
+(40, 'Prueba', 8),
+(58, 'La buena', 8),
+(59, 'Encuesta 1', 11);
 
 -- --------------------------------------------------------
 
@@ -101,15 +112,26 @@ CREATE TABLE `opciones` (
 --
 
 INSERT INTO `opciones` (`idOpciones`, `fk_idPregunta`, `descripcion`, `inciso`) VALUES
-(22, 9, 'A', ''),
-(23, 9, 'B', ''),
-(24, 9, 'C', ''),
-(25, 9, 'D', ''),
-(26, 10, 'A', ''),
-(27, 10, 'B', ''),
-(28, 10, 'C', ''),
-(29, 10, 'D', ''),
-(30, 11, '', '');
+(21, 53, 'A', ''),
+(22, 53, 'B', ''),
+(23, 53, 'C', ''),
+(24, 53, 'D', ''),
+(25, 54, 'primera', ''),
+(26, 54, 'segunda', ''),
+(27, 54, 'tercera', ''),
+(28, 54, 'cuarta', ''),
+(29, 56, 'z', ''),
+(30, 56, 'x', ''),
+(31, 56, 'y', ''),
+(32, 56, 'w', ''),
+(33, 58, 'Si', ''),
+(34, 58, 'No', ''),
+(35, 58, '', ''),
+(36, 58, '', ''),
+(37, 59, 'opcion1', ''),
+(38, 59, 'opcion2', ''),
+(39, 59, 'opcion3', ''),
+(40, 59, 'opcion4', '');
 
 -- --------------------------------------------------------
 
@@ -121,7 +143,6 @@ CREATE TABLE `pregunta` (
   `idPregunta` int(11) NOT NULL,
   `fk_idEncuesta` int(11) NOT NULL,
   `fk_tipoPregunta` int(11) NOT NULL,
-  `numero` int(11) NOT NULL,
   `descripcion` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -129,10 +150,17 @@ CREATE TABLE `pregunta` (
 -- Volcado de datos para la tabla `pregunta`
 --
 
-INSERT INTO `pregunta` (`idPregunta`, `fk_idEncuesta`, `fk_tipoPregunta`, `numero`, `descripcion`) VALUES
-(9, 30, 2, 1, 'opcion1'),
-(10, 30, 2, 6, 'opcion2'),
-(11, 30, 1, 11, 'abierta');
+INSERT INTO `pregunta` (`idPregunta`, `fk_idEncuesta`, `fk_tipoPregunta`, `descripcion`) VALUES
+(1, 40, 1, 'preguntaAbierta'),
+(51, 40, 1, 'preguntaAbierta2'),
+(52, 58, 1, 'abierta'),
+(53, 58, 2, 'opcion'),
+(54, 58, 3, 'Elije una o varias:'),
+(55, 58, 1, 'abierta2'),
+(56, 58, 2, 'opcion2'),
+(57, 59, 1, 'pregunta 1'),
+(58, 59, 2, 'pregunta 2'),
+(59, 59, 3, 'Pregunta 3');
 
 -- --------------------------------------------------------
 
@@ -147,6 +175,18 @@ CREATE TABLE `resultadoabierta` (
   `fk_idUsuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `resultadoabierta`
+--
+
+INSERT INTO `resultadoabierta` (`idresultadoAbierta`, `respuesta`, `fk_idPregunta`, `fk_idUsuario`) VALUES
+(1, 'dfdsfds', 52, 7),
+(2, 'sa vfd', 55, 7),
+(3, 'perros', 52, 7),
+(4, 'gatos', 55, 7),
+(5, 'abc', 57, 9),
+(6, 'Otra respuesta', 57, 9);
+
 -- --------------------------------------------------------
 
 --
@@ -159,6 +199,27 @@ CREATE TABLE `resultadoopcion` (
   `fk_idUsuario` int(11) NOT NULL,
   `fk_idPregunta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `resultadoopcion`
+--
+
+INSERT INTO `resultadoopcion` (`idresultadoOpcion`, `respuesta`, `fk_idUsuario`, `fk_idPregunta`) VALUES
+(1, '22', 7, 53),
+(2, '26', 7, 54),
+(3, '27', 7, 54),
+(4, '31', 7, 56),
+(5, '21', 7, 53),
+(6, '26', 7, 54),
+(7, '28', 7, 54),
+(8, '32', 7, 56),
+(9, '34', 9, 58),
+(10, '38', 9, 59),
+(11, '40', 9, 59),
+(12, '33', 9, 58),
+(13, '37', 9, 59),
+(14, '38', 9, 59),
+(15, '40', 9, 59);
 
 -- --------------------------------------------------------
 
@@ -198,8 +259,11 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idUsuario`, `usuario`, `contrasena`, `tipoUsuario`) VALUES
-(4, 'yugiohax@hotmail.com', 'qwerty', 2),
-(5, 'axel_lagunes@outlook.com', 'asd', 1);
+(7, 'user', '123', 1),
+(8, 'admin', '123', 2),
+(9, 'iridian@hotmail.com', '123', 1),
+(10, 'ricardo@hotmail.com', '', 2),
+(11, 'ricardo@hotmail.com', '123', 2);
 
 --
 -- Índices para tablas volcadas
@@ -263,37 +327,37 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `encuesta`
 --
 ALTER TABLE `encuesta`
-  MODIFY `idEncuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `idEncuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT de la tabla `opciones`
 --
 ALTER TABLE `opciones`
-  MODIFY `idOpciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `idOpciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT de la tabla `pregunta`
 --
 ALTER TABLE `pregunta`
-  MODIFY `idPregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idPregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT de la tabla `resultadoabierta`
 --
 ALTER TABLE `resultadoabierta`
-  MODIFY `idresultadoAbierta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idresultadoAbierta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `resultadoopcion`
 --
 ALTER TABLE `resultadoopcion`
-  MODIFY `idresultadoOpcion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idresultadoOpcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT de la tabla `tipopregunta`
 --
 ALTER TABLE `tipopregunta`
-  MODIFY `idtipoPregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idtipoPregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- Restricciones para tablas volcadas
 --
